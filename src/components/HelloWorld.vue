@@ -3,15 +3,15 @@
     <v-row>
       <v-col v-for="n in 4" :key="n">
         <v-card>
-          <v-card-title>Stat</v-card-title>
+          <v-card-title>Stat {{ n }}</v-card-title>
           <div class="display-1 pa-3">+76%</div>
         </v-card>
       </v-col>
     </v-row>
     <v-row>
       <v-col class="col-xs-12 col-sm-6 col-md-4" v-for="n in 16" :key="n">
-        <v-card>
-          <v-card-title class="py-1">Stats</v-card-title>
+        <v-card class="graph">
+          <v-card-title class="py-1">Multi-stat {{ n }}</v-card-title>
           <apexchart type="line" :options="chartOptions" :series="series" />
         </v-card>
       </v-col>
