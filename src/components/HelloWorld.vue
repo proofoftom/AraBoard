@@ -67,3 +67,9 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+.v-card.graph {
+  min-width: 275px;
+}
+</style>
