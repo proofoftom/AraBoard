@@ -51,7 +51,20 @@ export default {
     return {
       chartOptions: {
         xaxis: {
-          categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
+          categories: [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec"
+          ]
         },
         theme: {
           monochrome: {
@@ -65,11 +78,11 @@ export default {
       series: [
         {
           name: "series-1",
-          data: [30, 40, 45, 50, 49, 60, 70, 81]
+          data: [30, 40, 45, 50, 49, 60, 70, 81, 50, 40, 29, 60]
         },
         {
           name: "series-2",
-          data: [20, 30, 35, 40, 39, 50, 60, 71]
+          data: [50, 30, 65, 20, 39, 50, 80, 65, 30, 55, 49, 40]
         }
       ]
     };

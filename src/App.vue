@@ -17,7 +17,13 @@
       <v-spacer></v-spacer>
 
       <v-btn text>
-        <v-icon>fas fa-user</v-icon>
+        2020
+      </v-btn>
+      <v-btn text class="mx-2">
+        2019
+      </v-btn>
+      <v-btn text>
+        2018
       </v-btn>
     </v-app-bar>
 
