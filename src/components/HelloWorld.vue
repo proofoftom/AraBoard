@@ -9,12 +9,34 @@
           <div style="right: 0; position:absolute;" class="display-1 pa-3">
             +{{ series[0].data[2] }}%
           </div>
-          <v-card-title style="position:absolute">Stat {{ n }}</v-card-title>
+          <v-card-title style="position:absolute">
+            Simple-stat {{ n }}
+          </v-card-title>
           <apexchart
             style="padding-top:30px;"
             type="line"
             :options="{
               ...chartOptions,
+              xaxis: {
+                ...chartOptions.xaxis,
+                labels: {
+                  show: false
+                },
+                axisBorder: {
+                  show: false
+                }
+              },
+              yaxis: {
+                ...chartOptions.yaxis,
+                labels: {
+                  show: false
+                }
+              },
+              grid: {
+                yaxis: {
+                  lines: false
+                }
+              },
               chart: {
                 toolbar: {
                   show: false
