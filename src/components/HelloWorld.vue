@@ -1,5 +1,8 @@
 <template>
   <v-container fluid>
+    <v-row justify="center">
+      <v-btn @click="updateChart">Update!</v-btn>
+    </v-row>
     <v-row>
       <v-col v-for="n in 4" :key="n">
         <v-card>
@@ -12,12 +15,9 @@
       <v-col class="col-xs-12 col-sm-6 col-md-4" v-for="n in 16" :key="n">
         <v-card class="graph">
           <v-card-title class="py-1">Multi-stat {{ n }}</v-card-title>
-          <apexchart type="line" :options="chartOptions" :series="series" />
+          <apexchart type="area" :options="chartOptions" :series="series" />
         </v-card>
       </v-col>
-    </v-row>
-    <v-row justify="center">
-      <v-btn @click="updateChart">Update!</v-btn>
     </v-row>
   </v-container>
 </template>
