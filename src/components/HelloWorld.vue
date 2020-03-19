@@ -1,43 +1,16 @@
 <template>
-  <v-container fluid>
+  <v-container>
     <v-row justify="center">
-      <v-btn @click="updateChart">Update!</v-btn>
-    </v-row>
-    <v-row>
-      <v-col class="col-xs-12 col-sm-4 col-md-3" v-for="n in 4" :key="n">
-        <v-card style="min-width:176px">
-          <div style="right: 0; position:absolute;" class="display-1 pa-3">
-            +{{ series[0].data[2] }}%
-          </div>
-          <v-card-title style="position:absolute">Stat {{ n }}</v-card-title>
-          <apexchart
-            style="padding-top:30px;"
-            type="line"
-            :options="{
-              ...chartOptions,
-              chart: {
-                toolbar: {
-                  show: false
-                }
-              }
-            }"
-            :series="[series[0]]"
-          >
-          </apexchart>
-        </v-card>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col class="col-xs-12 col-sm-6 col-md-4" v-for="n in 6" :key="n">
-        <v-card class="graph">
-          <v-card-title style="position:absolute">
-            Multi-stat {{ n }}
+      <v-col class="col-8">
+        <v-card>
+          <v-card-title>
+            Orgs Created Per Day
           </v-card-title>
           <apexchart
-            style="padding-top:20px;"
-            type="area"
+            v-if="organisations.length > 0"
+            type="line"
             :options="chartOptions"
-            :series="series"
+            :series="countPerDay"
           />
         </v-card>
       </v-col>
@@ -46,63 +19,70 @@
 </template>
 
 <script>
+import moment from "moment";
+import _ from "underscore";
+
 export default {
-  data: function() {
+  mounted() {
+    this.fetchData();
+  },
+  data() {
     return {
-      chartOptions: {
-        xaxis: {
-          categories: [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec"
-          ]
-        },
-        theme: {
-          monochrome: {
-            enabled: true,
-            color: "#255aee",
-            shadeTo: "light",
-            shadeIntensity: 0.65
-          }
-        }
-      },
-      series: [
-        {
-          name: "series-1",
-          data: [30, 40, 45, 50, 49, 60, 70, 81, 50, 40, 29, 60]
-        },
-        {
-          name: "series-2",
-          data: [50, 30, 65, 20, 39, 50, 80, 65, 30, 55, 49, 40]
-        }
-      ]
+      organisations: []
     };
   },
   methods: {
-    updateChart() {
-      const max = 90;
-      const min = 20;
-      const newData = this.series[0].data.map(() => {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
+    async fetchData() {
+      const query = `query {
+                      organisations(take: 2000, sort: { createdAt: ASC }) {
+                        nodes {
+                          id
+                          createdAt
+                        }
+                      }
+                    }`;
+
+      const rawResponse = await fetch("https://daolist.1hive.org", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query })
       });
 
-      this.series = [{ data: newData }, { data: this.series[0].data }];
+      const response = await rawResponse.json();
+
+      this.organisations = response.data.organisations.nodes;
+    }
+  },
+  computed: {
+    orgsPerDay() {
+      return _.groupBy(this.organisations, organisation =>
+        moment(organisation.createdAt).format("MM-DD-YYYY")
+      );
+    },
+    countPerDay() {
+      // This could be simplified to just an array of values, but is keyed for potentially merging arrays.
+      let countPerDay = {};
+      Object.entries(this.orgsPerDay).forEach(([day, orgs]) => {
+        countPerDay[day] = orgs.length;
+      });
+      return [{ name: "Created", data: Object.values(countPerDay) }];
+    },
+    days() {
+      return Object.keys(this.orgsPerDay);
+    },
+    chartOptions() {
+      return {
+        xaxis: {
+          categories: this.days
+        }
+      };
     }
   }
 };
 </script>
 
 <style lang="scss">
-.v-card.graph {
+.v-card {
   min-width: 275px;
 }
 </style>
