@@ -73,7 +73,11 @@ export default {
     chartOptions() {
       return {
         xaxis: {
-          categories: this.days
+          categories: this.days,
+          title: { text: "Date" }
+        },
+        yaxis: {
+          title: { text: "Created" }
         }
       };
     }
